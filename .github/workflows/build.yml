@@ -1,0 +1,30 @@
+name: Build modelsaddles
+on:
+  push:
+jobs:
+  build-modelsaddle:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        - tag: gemma3-4b
+          models: gemma3:4b
+        - tag: granite3.2-vision-2b
+          models: granite3.2-vision:2b
+    steps:
+      - name: Login to Quay.io
+        uses: docker/login-action@v3
+        with:
+          registry: quay.io
+          username: ${{ secrets.QUAY_USERNAME }}
+          password: ${{ secrets.QUAY_PASSWORD }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          file: Containerfile
+          tags: quay.io/ncao/modelsaddle-catalog:${{ matrix.tag }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: MODELS=${{ matrix.models }}
