@@ -5,7 +5,7 @@ jobs:
   build-modelsaddle:
     runs-on: ubuntu-24.04
     strategy:
-      matrix:
+      image:
         - tag: gemma3-4b
           models: gemma3:4b
         - tag: granite3.2-vision-2b
@@ -24,7 +24,7 @@ jobs:
         with:
           push: true
           file: Containerfile
-          tags: quay.io/ncao/modelsaddle-catalog:${{ matrix.tag }}
+          tags: quay.io/ncao/modelsaddle-catalog:${{ matrix.image.tag }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          build-args: MODELS=${{ matrix.models }}
+          build-args: MODELS=${{ matrix.image.models }}
