@@ -11,6 +11,8 @@ jobs:
             models: gemma3:4b
           - tag: granite3.2-vision-2b
             models: granite3.2-vision:2b
+          - tag: moondream-1.8b
+            models: moondream:1.8b
     steps:
       - name: Skip build if image exists
         run: |
